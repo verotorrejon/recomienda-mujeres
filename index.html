@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Recomienda a Mujeres</title>
+
+  <meta
+    name="description"
+    content="Encuentra, recomienda y descubre mujeres profesionales, emprendedoras y trabajadoras independientes."
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #faf8f7;
+      color: #292323;
+      line-height: 1.5;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    /* -------------------------
+       NAVBAR
+    ------------------------- */
+
+    nav {
+      background: white;
+      border-bottom: 1px solid #eee;
+      padding: 18px 6%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      font-weight: 400;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .nav-button {
+      background: #292323;
+      color: white !important;
+      padding: 10px 17px;
+      border-radius: 25px;
+    }
+
+    /* -------------------------
+       HERO
+    ------------------------- */
+
+    .hero {
+      padding: 90px 6% 75px;
+      text-align: center;
+      background: #f3e9e7;
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 6vw, 70px);
+      line-height: 1.05;
+      max-width: 850px;
+      margin: auto;
+      letter-spacing: -2px;
+    }
+
+    .hero h1 span {
+      font-style: italic;
+    }
+
+    .hero p {
+      max-width: 650px;
+      margin: 25px auto 35px;
+      font-size: 18px;
+      color: #625b59;
+    }
+
+    .hero-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .primary-button,
+    .secondary-button {
+      border: none;
+      padding: 14px 25px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .primary-button {
+      background: #292323;
+      color: white;
+    }
+
+    .secondary-button {
+      background: white;
+      color: #292323;
+      border: 1px solid #ddd;
+    }
+
+    /* -------------------------
+       SEARCH
+    ------------------------- */
+
+    .search-section {
+      padding: 65px 6%;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .section-title h2 {
+      font-size: 34px;
+      margin-bottom: 8px;
+    }
+
+    .section-title p {
+      color: #777;
+    }
+
+    .search-box {
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+      display: grid;
+      grid-template-columns: 1.5fr 1fr auto;
+      gap: 12px;
+    }
+
+    .search-box input,
+    .search-box select {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 14px;
+      background: white;
+      outline: none;
+    }
+
+    .search-box button {
+      border: none;
+      background: #292323;
+      color: white;
+      border-radius: 10px;
+      padding: 14px 22px;
+      cursor: pointer;
+    }
+
+    /* -------------------------
+       DIRECTORY
+    ------------------------- */
+
+    .directory {
+      padding: 30px 6% 80px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .results-info {
+      margin-bottom: 20px;
+      color: #777;
+      font-size: 14px;
+    }
+
+    .profiles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .profile-card {
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid #eee;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    }
+
+    .profile-image {
+      height: 230px;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .profile-content {
+      padding: 20px;
+    }
+
+    .profile-category {
+      font-size: 12px;
+      color: #9a7770;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+
+    .profile-name {
+      font-size: 22px;
+      margin-bottom: 3px;
+    }
+
+    .profile-location {
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .rating {
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+
+    .rating span {
+      color: #b58c42;
+    }
+
+    .profile-description {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .view-profile {
+      width: 100%;
+      padding: 11px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      background: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* -------------------------
+       HOW IT WORKS
+    ------------------------- */
+
+    .how-section {
+      background: white;
+      padding: 80px 6%;
+    }
+
+    .steps {
+      max-width: 1000px;
+      margin: 40px auto 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+    }
+
+    .step {
+      text-align: center;
+      padding: 25px;
+    }
+
+    .step-number {
+      width: 45px;
+      height: 45px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: #f3e9e7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .step h3 {
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      color: #777;
+      font-size: 14px;
+    }
+
+    /* -------------------------
+       CTA
+    ------------------------- */
+
+    .cta {
+      padding: 80px 6%;
+      text-align: center;
+      background: #292323;
+      color: white;
+    }
+
+    .cta h2 {
+      font-size: 38px;
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.15;
+    }
+
+    .cta p {
+      color: #ddd;
+      max-width: 600px;
+      margin: 20px auto 30px;
+    }
+
+    /* -------------------------
+       MODAL
+    ------------------------- */
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 200;
+      padding: 30px;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      background: white;
+      max-width: 650px;
+      margin: 30px auto;
+      padding: 35px;
+      border-radius: 20px;
+      position: relative;
+    }
+
+    .close {
+      position: absolute;
+      right: 20px;
+      top: 15px;
+      font-size: 28px;
+      cursor: pointer;
+      color: #777;
+    }
+
+    .modal h2 {
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .form-group textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #292323;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* -------------------------
+       PROFILE MODAL
+    ------------------------- */
+
+    .profile-modal-image {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 14px;
+      margin-bottom: 20px;
+    }
+
+    .profile-services {
+      margin: 20px 0;
+    }
+
+    .profile-services li {
+      margin-left: 20px;
+      margin-bottom: 5px;
+    }
+
+    .reviews {
+      border-top: 1px solid #eee;
+      margin-top: 25px;
+      padding-top: 20px;
+    }
+
+    .review {
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .review-name {
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .review p {
+      color: #666;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    /* -------------------------
+       FOOTER
+    ------------------------- */
+
+    footer {
+      padding: 35px 6%;
+      background: #1f1b1b;
+      color: #aaa;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    /* -------------------------
+       MOBILE
+    ------------------------- */
+
+    @media (max-width: 850px) {
+
+      .nav-links {
+        display: none;
+      }
+
+      .search-box {
+        grid-template-columns: 1fr;
+      }
+
+      .profiles-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+
+      .hero {
+        padding: 65px 20px;
+      }
+
+      .hero h1 {
+        letter-spacing: -1px;
+      }
+
+      .profiles-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search-section,
+      .directory {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .modal {
+        padding: 10px;
+      }
+
+      .modal-content {
+        padding: 25px 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+
+  <nav>
+    <div class="logo">
+      Recomienda <span>a Mujeres</span>
+    </div>
+
+    <div class="nav-links">
+      <a href="#buscar">Encontrar mujeres</a>
+      <a href="#como-funciona">Cómo funciona</a>
+
+      <a
+        href="#"
+        class="nav-button"
+        onclick="openJoinModal(); return false;"
+      >
+        Quiero aparecer
+      </a>
+    </div>
+  </nav>
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <h1>
+      Recomienda a <span>mujeres</span> que hacen cosas increíbles.
+    </h1>
+
+    <p>
+      Un espacio para descubrir, recomendar y visibilizar a mujeres
+      profesionales, emprendedoras y trabajadoras independientes.
+    </p>
+
+    <div class="hero-buttons">
+
+      <a href="#buscar">
+        <button class="primary-button">
+          Encontrar una mujer
+        </button>
+      </a>
+
+      <button
+        class="secondary-button"
+        onclick="openJoinModal()"
+      >
+        Quiero aparecer
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- SEARCH -->
+
+  <section class="search-section" id="buscar">
+
+    <div class="section-title">
+
+      <h2>Encuentra a alguien que recomiendan</h2>
+
+      <p>
+        Busca por profesión, servicio o región.
+      </p>
+
+    </div>
+
+
+    <div class="search-box">
+
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Ej: maquilladora, nutricionista..."
+      >
+
+      <select id="regionFilter">
+
+        <option value="">Todas las regiones</option>
+
+        <option value="Metropolitana">
+          Metropolitana
+        </option>
+
+        <option value="Valparaíso">
+          Valparaíso
+        </option>
+
+        <option value="Biobío">
+          Biobío
+        </option>
+
+        <option value="Coquimbo">
+          Coquimbo
+        </option>
+
+      </select>
+
+      <button onclick="filterProfiles()">
+        Buscar
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- DIRECTORY -->
+
+  <section class="directory">
+
+    <div
+      class="results-info"
+      id="resultsInfo"
+    >
+      Mostrando mujeres recomendadas
+    </div>
+
+    <div
+      class="profiles-grid"
+      id="profilesGrid"
+    >
+    </div>
+
+  </section>
+
+
+  <!-- HOW IT WORKS -->
+
+  <section class="how-section" id="como-funciona">
+
+    <div class="section-title">
+
+      <h2>¿Cómo funciona?</h2>
+
+      <p>
+        Una forma simple de visibilizar el talento de más mujeres.
+      </p>
+
+    </div>
+
+
+    <div class="steps">
+
+      <div class="step">
+
+        <div class="step-number">
+          1
+        </div>
+
+        <h3>
+          Crea tu perfil
+        </h3>
+
+        <p>
+          Cuenta quién eres, qué haces, qué servicios ofreces
+          y muestra tu trabajo.
+        </p>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="step-number">
+          2
+        </div>
+
+        <h3>
+          Déjate descubrir
+        </h3>
+
+        <p>
+          Otras personas pueden encontrarte buscando por
+          profesión, servicio o región.
+        </p>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="step-number">
+          3
+        </div>
+
+        <h3>
+          Recibe recomendaciones
+        </h3>
+
+        <p>
+          Tus clientas pueden dejar comentarios y valorar
+          su experiencia contigo.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- CTA -->
+
+  <section class="cta">
+
+    <h2>
+      ¿Eres una mujer que tiene algo que ofrecer?
+    </h2>
+
+    <p>
+      Estamos construyendo un espacio para que más mujeres
+      puedan mostrarse, ser descubiertas y tener nuevas oportunidades.
+    </p>
+
+    <button
+      class="secondary-button"
+      onclick="openJoinModal()"
+    >
+      Quiero aparecer
+    </button>
+
+  </section>
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    © 2026 Recomienda a Mujeres
+
+  </footer>
+
+
+  <!-- JOIN MODAL -->
+
+  <div
+    class="modal"
+    id="joinModal"
+  >
+
+    <div class="modal-content">
+
+      <span
+        class="close"
+        onclick="closeJoinModal()"
+      >
+        &times;
+      </span>
+
+      <h2>
+        Quiero aparecer
+      </h2>
+
+      <p style="color:#777; margin-bottom:25px;">
+        Déjanos tus datos para ser parte de las primeras mujeres
+        que aparecen en Recomienda a Mujeres.
+      </p>
+
+      <form onsubmit="submitJoinForm(event)">
+
+        <div class="form-group">
+
+          <label>
+            Nombre
+          </label>
+
+          <input
+            type="text"
+            required
+            placeholder="Tu nombre"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Profesión u oficio
+          </label>
+
+          <input
+            type="text"
+            required
+            placeholder="Ej: Maquilladora"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Región
+          </label>
+
+          <select required>
+
+            <option value="">
+              Selecciona una región
+            </option>
+
+            <option>
+              Metropolitana
+            </option>
+
+            <option>
+              Valparaíso
+            </option>
+
+            <option>
+              Biobío
+            </option>
+
+            <option>
+              Coquimbo
+            </option>
+
+            <option>
+              Otra
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Instagram o página web
+          </label>
+
+          <input
+            type="text"
+            placeholder="@tuinstagram.com"
+          >
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>
+            Cuéntanos brevemente qué haces
+          </label>
+
+          <textarea
+            placeholder="Describe tu trabajo..."
+          ></textarea>
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="submit-button"
+        >
+          Enviar solicitud
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- PROFILE MODAL -->
+
+  <div
+    class="modal"
+    id="profileModal"
+  >
+
+    <div class="modal-content">
+
+      <span
+        class="close"
+        onclick="closeProfileModal()"
+      >
+        &times;
+      </span>
+
+      <div id="profileDetails"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- JAVASCRIPT -->
+
+  <script>
+
+    const profiles = [
+
+      {
+        id: 1,
+        name: "Manuela Pérez",
+        category: "Maquilladora",
+        region: "Metropolitana",
+        location: "Santiago",
+        rating: 4.9,
+        reviews: 27,
+        image:
+          "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80",
+        description:
+          "Maquilladora profesional especializada en maquillaje social, novias y eventos.",
+        services: [
+          "Maquillaje social",
+          "Maquillaje para novias",
+          "Maquillaje para eventos",
+          "Clases de automaquillaje"
+        ],
+        reviewList: [
+          {
+            name: "Camila",
+            text: "Excelente profesional. Muy dedicada y el resultado fue increíble."
+          },
+          {
+            name: "Francisca",
+            text: "Muy puntual, amable y talentosa. La recomiendo totalmente."
+          }
+        ]
+      },
+
+      {
+        id: 2,
+        name: "Camila Soto",
+        category: "Nutricionista",
+        region: "Valparaíso",
+        location: "Viña del Mar",
+        rating: 5.0,
+        reviews: 18,
+        image:
+          "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80",
+        description:
+          "Nutricionista enfocada en educación alimentaria y acompañamiento personalizado.",
+        services: [
+          "Consulta nutricional",
+          "Planificación alimentaria",
+          "Educación nutricional",
+          "Seguimiento online"
+        ],
+        reviewList: [
+          {
+            name: "Daniela",
+            text: "Me ayudó muchísimo y siempre estuvo disponible para resolver mis dudas."
+          },
+          {
+            name: "Sofía",
+            text: "Una profesional muy cercana y clara para explicar."
+          }
+        ]
+      },
+
+      {
+        id: 3,
+        name: "Javiera Morales",
+        category: "Psicóloga",
+        region: "Metropolitana",
+        location: "Providencia",
+        rating: 4.8,
+        reviews: 31,
+        image:
+          "https://images.unsplash.com/photo-1551836022-4c4c79ecde51?auto=format&fit=crop&w=800&q=80",
+        description:
+          "Psicóloga dedicada al acompañamiento de procesos personales y bienestar.",
+        services: [
+          "Sesiones individuales",
+          "Atención online",
+          "Acompañamiento personal",
+          "Talleres"
+        ],
+        reviewList: [
+          {
+            name: "María",
+            text: "Me sentí muy escuchada y acompañada durante todo el proceso."
+          }
+        ]
+      },
+
+      {
+        id: 4,
+        name: "Sofía Ramírez",
+        category: "Fotógrafa",
+        region: "Biobío",
+        location: "Concepción",
+        rating: 4.9,
+        reviews: 14,
+        image:
+          "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
+        description:
+          "Fotógrafa especializada en retratos, marcas personales y emprendimientos.",
+        services: [
+          "Fotografía de marca",
+          "Retratos",
+          "Fotografía para emprendimientos",
+          "Contenido para redes sociales"
+        ],
+        reviewList: [
+          {
+            name: "Antonia",
+            text: "Entendió exactamente lo que necesitaba para mi marca."
+          }
+        ]
+      },
+
+      {
+        id: 5,
+        name: "Daniela Fuentes",
+        category: "Diseñadora",
+        region: "Coquimbo",
+        location: "La Serena",
+        rating: 4.7,
+        reviews: 9,
+        image:
+          "https://images.unsplash.com/photo-1551836022-8b2858c9c9c4?auto=format&fit=crop&w=800&q=80",
+        description:
+          "Diseñadora gráfica que ayuda a pequeñas marcas a construir su identidad visual.",
+        services: [
+          "Identidad visual",
+          "Diseño de logos",
+          "Redes sociales",
+          "Material gráfico"
+        ],
+        reviewList: [
+          {
+            name: "Paula",
+            text: "Muy profesional y creativa. Estoy feliz con mi identidad visual."
+          }
+        ]
+      },
+
+      {
+        id: 6,
+        name: "Valentina Rojas",
+        category: "Coach",
+        region: "Metropolitana",
+        location: "Ñuñoa",
+        rating: 5.0,
+        reviews: 12,
+        image:
+          "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80",
+        description:
+          "Acompañamiento para mujeres que quieren ordenar sus objetivos y proyectos.",
+        services: [
+          "Sesiones individuales",
+          "Acompañamiento de proyectos",
+          "Talleres",
+          "Sesiones online"
+        ],
+        reviewList: [
+          {
+            name: "Carolina",
+            text: "Me ayudó a ordenar mis ideas y finalmente dar el primer paso."
+          }
+        ]
+      }
+
+    ];
+
+
+    /* -------------------------
+       DISPLAY PROFILES
+    ------------------------- */
+
+    function displayProfiles(list) {
+
+      const grid =
+        document.getElementById("profilesGrid");
+
+      const info =
+        document.getElementById("resultsInfo");
+
+
+      grid.innerHTML = "";
+
+
+      info.textContent =
+        `${list.length} mujer${list.length === 1 ? "" : "es"} encontrada${list.length === 1 ? "" : "s"}`;
+
+
+      if (list.length === 0) {
+
+        grid.innerHTML = `
+          <div style="grid-column:1/-1; text-align:center; padding:50px;">
+            <h3>No encontramos resultados</h3>
+            <p style="color:#777; margin-top:8px;">
+              Prueba con otra profesión o región.
+            </p>
+          </div>
+        `;
+
+        return;
+      }
+
+
+      list.forEach(profile => {
+
+        const card =
+          document.createElement("div");
+
+        card.className = "profile-card";
+
+
+        card.innerHTML = `
+
+          <img
+            class="profile-image"
+            src="${profile.image}"
+            alt="${profile.name}"
+          >
+
+          <div class="profile-content">
+
+            <div class="profile-category">
+              ${profile.category}
+            </div>
+
+            <h3 class="profile-name">
+              ${profile.name}
+            </h3>
+
+            <div class="profile-location">
+              📍 ${profile.location}
+            </div>
+
+            <div class="rating">
+              <span>★★★★★</span>
+              ${profile.rating}
+              (${profile.reviews})
+            </div>
+
+            <p class="profile-description">
+              ${profile.description}
+            </p>
+
+            <button
+              class="view-profile"
+              onclick="openProfile(${profile.id})"
+            >
+              Ver perfil
+            </button>
+
+          </div>
+        `;
+
+
+        grid.appendChild(card);
+
+      });
+
+    }
+
+
+    /* -------------------------
+       SEARCH
+    ------------------------- */
+
+    function filterProfiles() {
+
+      const search =
+        document
+          .getElementById("searchInput")
+          .value
+          .toLowerCase()
+          .trim();
+
+
+      const region =
+        document
+          .getElementById("regionFilter")
+          .value;
+
+
+      const filtered =
+        profiles.filter(profile => {
+
+          const matchesSearch =
+            !search ||
+            profile.name.toLowerCase().includes(search) ||
+            profile.category.toLowerCase().includes(search) ||
+            profile.description.toLowerCase().includes(search) ||
+            profile.services.some(service =>
+              service.toLowerCase().includes(search)
+            );
+
+
+          const matchesRegion =
+            !region ||
+            profile.region === region;
+
+
+          return matchesSearch && matchesRegion;
+
+        });
+
+
+      displayProfiles(filtered);
+
+    }
+
+
+    /* -------------------------
+       PROFILE
+    ------------------------- */
+
+    function openProfile(id) {
+
+      const profile =
+        profiles.find(p => p.id === id);
+
+
+      const details =
+        document.getElementById("profileDetails");
+
+
+      details.innerHTML = `
+
+        <img
+          src="${profile.image}"
+          alt="${profile.name}"
+          class="profile-modal-image"
+        >
+
+        <div class="profile-category">
+          ${profile.category}
+        </div>
+
+        <h2>
+          ${profile.name}
+        </h2>
+
+        <p style="color:#777;">
+          📍 ${profile.location}
+        </p>
+
+        <div class="rating" style="margin-top:10px;">
+          <span>★★★★★</span>
+          ${profile.rating}
+          (${profile.reviews} recomendaciones)
+        </div>
+
+        <p style="margin-top:20px;">
+          ${profile.description}
+        </p>
+
+        <div class="profile-services">
+
+          <h3>
+            Servicios
+          </h3>
+
+          <ul>
+
+            ${profile.services
+              .map(service => `<li>${service}</li>`)
+              .join("")}
+
+          </ul>
+
+        </div>
+
+        <div class="reviews">
+
+          <h3>
+            Recomendaciones
+          </h3>
+
+          ${profile.reviewList
+            .map(review => `
+              <div class="review">
+                <div class="review-name">
+                  ${review.name} · ★★★★★
+                </div>
+                <p>
+                  ${review.text}
+                </p>
+              </div>
+            `)
+            .join("")}
+
+        </div>
+
+        <button
+          class="submit-button"
+          style="margin-top:20px;"
+          onclick="alert('En una próxima versión aquí podremos conectar directamente con WhatsApp, Instagram o la página de la profesional.')"
+        >
+          Contactar
+        </button>
+
+      `;
+
+
+      document
+        .getElementById("profileModal")
+        .style.display = "block";
+
+    }
+
+
+    function closeProfileModal() {
+
+      document
+        .getElementById("profileModal")
+        .style.display = "none";
+
+    }
+
+
+    /* -------------------------
+       JOIN FORM
+    ------------------------- */
+
+    function openJoinModal() {
+
+      document
+        .getElementById("joinModal")
+        .style.display = "block";
+
+    }
+
+
+    function closeJoinModal() {
+
+      document
+        .getElementById("joinModal")
+        .style.display = "none";
+
+    }
+
+
+    function submitJoinForm(event) {
+
+      event.preventDefault();
+
+      alert(
+        "¡Gracias! Esta primera versión es un prototipo. En la siguiente etapa podemos conectar este formulario con una base de datos para recibir solicitudes reales."
+      );
+
+      closeJoinModal();
+
+    }
+
+
+    /* -------------------------
+       CLOSE MODALS
+    ------------------------- */
+
+    window.onclick = function(event) {
+
+      const joinModal =
+        document.getElementById("joinModal");
+
+      const profileModal =
+        document.getElementById("profileModal");
+
+
+      if (event.target === joinModal) {
+        closeJoinModal();
+      }
+
+
+      if (event.target === profileModal) {
+        closeProfileModal();
+      }
+
+    };
+
+
+    /* -------------------------
+       INITIAL LOAD
+    ------------------------- */
+
+    displayProfiles(profiles);
+
+  </script>
+
+</body>
+</html>
