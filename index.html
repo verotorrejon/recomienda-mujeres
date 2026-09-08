@@ -213,6 +213,56 @@
       border-color: #292323;
     }
 
+    .extra-filters {
+      max-width: 1100px;
+      margin: 14px auto 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .extra-filters label {
+      font-size: 13px;
+      color: #625b59;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .extra-filters select {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: white;
+    }
+
+    .contact-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .contact-buttons a {
+      flex: 1;
+      text-align: center;
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .whatsapp-btn {
+      background: #25D366;
+      color: white !important;
+    }
+
+    .instagram-btn {
+      background: #292323;
+      color: white !important;
+    }
+
     /* -------------------------
        DIRECTORY
     ------------------------- */
@@ -659,6 +709,31 @@
 
     <div class="quick-categories" id="quickCategories"></div>
 
+    <div class="extra-filters">
+
+      <label>
+        Rating mínimo:
+        <select id="ratingFilter" onchange="filterProfiles()">
+          <option value="0">Todos</option>
+          <option value="4">4.0+</option>
+          <option value="4.5">4.5+</option>
+          <option value="4.8">4.8+</option>
+          <option value="5">Solo 5.0</option>
+        </select>
+      </label>
+
+      <label>
+        Ordenar por:
+        <select id="sortBy" onchange="filterProfiles()">
+          <option value="default">Recomendado</option>
+          <option value="name-asc">Nombre (A-Z)</option>
+          <option value="reviews-desc">Más evaluaciones</option>
+          <option value="rating-desc">Mejor rating</option>
+        </select>
+      </label>
+
+    </div>
+
   </section>
 
 
@@ -814,7 +889,12 @@
         que aparecen en Recomienda Mujeres.
       </p>
 
-      <form onsubmit="submitJoinForm(event)">
+      <iframe
+        id="formEmbed"
+        style="display:none; width:100%; min-height:600px; border:none;"
+      ></iframe>
+
+      <form id="fallbackForm" onsubmit="submitJoinForm(event)">
 
         <div class="form-group">
 
@@ -1122,10 +1202,36 @@
 
     ];
 
-    let activeCategory = "";
+
+    /* ==========================================================
+       CONFIGURACIÓN — AQUÍ VAS A PEGAR TUS DATOS Y LINKS
+       ========================================================== */
+
+    const CONFIG = {
+
+      // Contacto de respaldo (se usa si un perfil no tiene su propio
+      // whatsapp/instagram cargado desde el formulario)
+      OWNER_WHATSAPP: "56982398540",   // sin "+", sin espacios
+      OWNER_INSTAGRAM: "verotorrejon", // sin "@"
+
+      // Pega aquí la URL de embed de tu Google Form cuando la tengas
+      // (Formulario > Enviar > ícono "<>" > copiar el link del src)
+      // Ejemplo: "https://docs.google.com/forms/d/e/XXXX/viewform?embedded=true"
+      FORM_EMBED_URL: "",
+
+      // Pega aquí la URL de tu Apps Script Web App cuando la tengas
+      // (ver guía "codigo-google-apps-script.txt")
+      // Si la dejas vacía, la página sigue funcionando con los
+      // perfiles de ejemplo de más abajo.
+      SHEET_API_URL: ""
+
+    };
+
+
+    let activeCategories = new Set();
 
     /* -------------------------
-       QUICK CATEGORY CHIPS
+       QUICK CATEGORY CHIPS (multi-selección)
     ------------------------- */
 
     function buildCategoryChips() {
@@ -1145,10 +1251,24 @@
 
     function selectCategory(cat) {
 
-      activeCategory = cat;
+      if (cat === "") {
+        // "Todas" limpia cualquier selección múltiple
+        activeCategories.clear();
+      } else {
+        if (activeCategories.has(cat)) {
+          activeCategories.delete(cat);
+        } else {
+          activeCategories.add(cat);
+        }
+      }
 
       document.querySelectorAll(".category-chip").forEach(chip => {
-        chip.classList.toggle("active", chip.getAttribute("data-cat") === cat);
+        const chipCat = chip.getAttribute("data-cat");
+        if (chipCat === "") {
+          chip.classList.toggle("active", activeCategories.size === 0);
+        } else {
+          chip.classList.toggle("active", activeCategories.has(chipCat));
+        }
       });
 
       filterProfiles();
@@ -1266,8 +1386,14 @@
           .getElementById("regionFilter")
           .value;
 
+      const minRating =
+        parseFloat(document.getElementById("ratingFilter").value) || 0;
 
-      const filtered =
+      const sortBy =
+        document.getElementById("sortBy").value;
+
+
+      let filtered =
         profiles.filter(profile => {
 
           const matchesSearch =
@@ -1284,14 +1410,31 @@
             !region ||
             profile.region === region;
 
+          // Multi-categoría: si hay chips activos, el perfil debe
+          // calzar con AL MENOS uno de ellos
           const matchesCategory =
-            !activeCategory ||
-            profile.category === activeCategory;
+            activeCategories.size === 0 ||
+            activeCategories.has(profile.category);
+
+          const matchesRating =
+            profile.rating >= minRating;
 
 
-          return matchesSearch && matchesRegion && matchesCategory;
+          return matchesSearch && matchesRegion && matchesCategory && matchesRating;
 
         });
+
+
+      // Ordenar
+      if (sortBy === "name-asc") {
+        filtered = filtered.slice().sort((a, b) =>
+          a.name.localeCompare(b.name, "es")
+        );
+      } else if (sortBy === "reviews-desc") {
+        filtered = filtered.slice().sort((a, b) => b.reviews - a.reviews);
+      } else if (sortBy === "rating-desc") {
+        filtered = filtered.slice().sort((a, b) => b.rating - a.rating);
+      }
 
 
       displayProfiles(filtered);
@@ -1380,13 +1523,27 @@
 
         </div>
 
-        <button
-          class="submit-button"
-          style="margin-top:20px;"
-          onclick="alert('En una próxima versión aquí podremos conectar directamente con WhatsApp, Instagram o la página de la profesional.')"
-        >
-          Contactar
-        </button>
+        <div class="contact-buttons">
+
+          <a
+            class="whatsapp-btn"
+            href="https://wa.me/${(profile.whatsapp || CONFIG.OWNER_WHATSAPP).replace(/\D/g, "")}"
+            target="_blank"
+            rel="noopener"
+          >
+            💬 WhatsApp
+          </a>
+
+          <a
+            class="instagram-btn"
+            href="https://instagram.com/${(profile.instagram || CONFIG.OWNER_INSTAGRAM).replace('@','')}"
+            target="_blank"
+            rel="noopener"
+          >
+            📷 Instagram
+          </a>
+
+        </div>
 
       `;
 
@@ -1412,6 +1569,20 @@
     ------------------------- */
 
     function openJoinModal() {
+
+      const iframe = document.getElementById("formEmbed");
+      const fallback = document.getElementById("fallbackForm");
+
+      if (CONFIG.FORM_EMBED_URL) {
+        // Ya conectaste tu Google Form real: se muestra dentro del modal
+        iframe.src = CONFIG.FORM_EMBED_URL;
+        iframe.style.display = "block";
+        fallback.style.display = "none";
+      } else {
+        // Todavía no está conectado el Google Form: usa el formulario de ejemplo
+        iframe.style.display = "none";
+        fallback.style.display = "block";
+      }
 
       document
         .getElementById("joinModal")
@@ -1468,11 +1639,44 @@
 
 
     /* -------------------------
+       CARGA DESDE GOOGLE SHEETS (base de datos)
+    ------------------------- */
+
+    async function loadProfilesFromSheet() {
+
+      if (!CONFIG.SHEET_API_URL) {
+        // Todavía no conectaste la hoja: se queda con los perfiles
+        // de ejemplo definidos arriba en el código.
+        return;
+      }
+
+      try {
+
+        const response = await fetch(CONFIG.SHEET_API_URL);
+        const data = await response.json();
+
+        if (Array.isArray(data) && data.length > 0) {
+          profiles.length = 0;
+          data.forEach(p => profiles.push(p));
+        }
+
+      } catch (err) {
+        console.error("No se pudo cargar la hoja de datos, usando perfiles de ejemplo:", err);
+      }
+
+      buildCategoryChips();
+      filterProfiles();
+
+    }
+
+
+    /* -------------------------
        INITIAL LOAD
     ------------------------- */
 
     buildCategoryChips();
     displayProfiles(profiles);
+    loadProfilesFromSheet();
 
   </script>
 
