@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recomienda Mujeres — Encuentra, conecta, crece</title>
+<meta name="description" content="Directorio de mujeres profesionales, emprendedoras y prestadoras de servicios en Chile. Encuentra, conoce y contacta.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- =================== HEADER + MEGA MENÚ (punto 2.3) =================== -->
+<header class="header">
+  <div class="contenedor header__fila">
+    <a href="index.html" class="logo">Recomienda<span>Mujeres</span></a>
+
+    <nav class="nav-principal" id="nav-principal">
+      <div class="nav-item">
+        <a href="#" class="nav-link">Explorar
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.6"/></svg>
+        </a>
+        <!-- Se llena por JS: Área > Profesión, igual que el mega menú de Ripley -->
+        <div class="mega-menu" id="mega-menu-areas"></div>
+      </div>
+      <div class="nav-item"><a href="catalogo.html?tipo=pyme" class="nav-link">Pymes</a></div>
+      <div class="nav-item"><a href="#eventos" class="nav-link">Eventos</a></div>
+      <div class="nav-item"><a href="#como-funciona" class="nav-link">Cómo funciona</a></div>
+      <div class="nav-item"><a href="#" class="nav-link">Quiénes somos</a></div>
+    </nav>
+
+    <div class="header__acciones">
+      <a href="#" class="link-sesion">Iniciar sesión</a>
+      <button class="boton boton-primario boton-chico" data-abrir-modal>Quiero aparecer</button>
+      <button class="boton-hamburguesa" id="boton-hamburguesa" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- =================== HERO + BUSCADOR (punto 2.2.1 y 1.2.3) ===================
+     Decisión de diseño: en vez de un 3er botón CTA genérico ("cómo funciona"),
+     lo movimos al menú (ya es su propia página) y usamos este espacio para
+     prueba social + chips de categoría, que ayudan más al flujo ENCONTRAR. -->
+<section class="hero">
+  <div class="contenedor">
+    <div class="etiqueta-seccion">DIRECTORIO DE MUJERES EN CHILE</div>
+    <h1>Recomienda mujeres que hacen <em>cosas increíbles</em></h1>
+    <p class="hero__sub">Encuentra, conoce y contacta a profesionales, emprendedoras y negocios liderados por mujeres, cerca de ti.</p>
+
+    <form class="buscador" id="form-buscador" action="catalogo.html" method="get">
+      <input type="text" id="input-buscador" name="q" placeholder="¿Qué necesitas? Ej: pediatra, peluquera, contadora..." autocomplete="off">
+      <button type="submit">Buscar</button>
+      <div class="buscador__sugerencias" id="sugerencias-buscador"></div>
+    </form>
+
+    <div class="hero__chips">
+      <a class="chip" href="catalogo.html?categoria=salud">🩺 Salud</a>
+      <a class="chip" href="catalogo.html?categoria=belleza">💄 Belleza</a>
+      <a class="chip" href="catalogo.html?categoria=negocios">💼 Negocios</a>
+      <a class="chip" href="catalogo.html?categoria=eventos">🎉 Eventos</a>
+      <a class="chip" href="catalogo.html?categoria=tecnologia">💻 Tecnología</a>
+    </div>
+
+    <div class="hero__stat"><span class="punto-vivo"></span> <b>+120 mujeres</b>&nbsp;recomendadas ya en <b>18 regiones</b> de Chile</div>
+  </div>
+</section>
+
+<!-- =================== BANNER / CARRUSEL (punto 2.2.2) ===================
+     5 slides, autoplay cada 6s + navegación manual (flechas y dots).
+     Cada slide lleva a un destino real: catálogo, sección de eventos o
+     el formulario "Quiero aparecer" — nunca a un link muerto. -->
+<section class="banner">
+  <div class="contenedor">
+    <div class="carrusel">
+      <div class="carrusel__pista" id="carrusel-pista">
+
+        <a class="slide" style="background-image:url('https://picsum.photos/id/1027/1200/500')" href="catalogo.html">
+          <div class="slide__contenido">
+            <div class="slide__kicker">Historia destacada</div>
+            <h3>Conoce a Javiera Muñoz, Nutrióloga en Providencia</h3>
+            <p>De atender en su departamento a tener lista de espera en 6 meses. Su historia, y cómo la encontraron sus primeras clientas.</p>
+            <span class="boton boton-outline-blanco boton-chico">Ver su historia</span>
+          </div>
+        </a>
+
+        <a class="slide" style="background-image:url('https://picsum.photos/id/1005/1200/500')" href="#eventos">
+          <div class="slide__contenido">
+            <div class="slide__kicker">Evento de la comunidad</div>
+            <h3>Mañana de Wellness — sábado 14 de noviembre</h3>
+            <p>Social run + brunch con taller de bienestar emocional. Quedan los últimos cupos.</p>
+            <span class="boton boton-outline-blanco boton-chico">Ver evento</span>
+          </div>
+        </a>
+
+        <a class="slide" data-abrir-modal style="background-image:url('https://picsum.photos/id/1011/1200/500')" href="#">
+          <div class="slide__contenido">
+            <div class="slide__kicker">Únete</div>
+            <h3>¿Tienes un servicio o emprendimiento?</h3>
+            <p>Crea tu perfil gratis y deja que más personas te encuentren.</p>
+            <span class="boton boton-outline-blanco boton-chico">Quiero aparecer</span>
+          </div>
+        </a>
+
+        <a class="slide" style="background-image:url('https://picsum.photos/id/1074/1200/500')" href="catalogo.html?tipo=pyme">
+          <div class="slide__contenido">
+            <div class="slide__kicker">Pymes y emprendimientos</div>
+            <h3>Descubre negocios liderados por mujeres cerca de ti</h3>
+            <p>Desde repostería artesanal hasta estudios de diseño. Explora el catálogo de pymes.</p>
+            <span class="boton boton-outline-blanco boton-chico">Explorar pymes</span>
+          </div>
+        </a>
+
+        <a class="slide" style="background-image:url('https://picsum.photos/id/1062/1200/500')" href="catalogo.html">
+          <div class="slide__contenido">
+            <div class="slide__kicker">Alianza</div>
+            <h3>Nueva alianza con Cámara de Emprendedoras de Chile</h3>
+            <p>Beneficios exclusivos para las profesionales de nuestra comunidad.</p>
+            <span class="boton boton-outline-blanco boton-chico">Conocer más</span>
+          </div>
+        </a>
+
+      </div>
+      <button class="carrusel__flecha carrusel__flecha--izq" id="carrusel-prev" aria-label="Slide anterior">‹</button>
+      <button class="carrusel__flecha carrusel__flecha--der" id="carrusel-next" aria-label="Slide siguiente">›</button>
+      <div class="carrusel__dots" id="carrusel-dots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== ESPACIO PUBLICITARIO (punto 1.2.4) ===================
+     Franja angosta y elegante. Placeholder de ejemplo — reemplazar por el
+     asset real de la marca cuando exista un acuerdo comercial. -->
+<section class="espacio-ads">
+  <div class="contenedor">
+    <div class="ads__marco">
+      <span class="ads__etiqueta">Espacio publicitario</span>
+      <p class="ads__texto">Tu marca aquí — apoya a las mujeres de tu comunidad y <b>llega a +120 profesionales y sus clientas.</b></p>
+      <a href="#" class="boton boton-secundario boton-chico">Quiero anunciarme</a>
+    </div>
+  </div>
+</section>
+
+<!-- =================== PRÓXIMOS EVENTOS + COUNTDOWN (punto 1.2.5) =================== -->
+<section class="eventos" id="eventos">
+  <div class="contenedor">
+    <div class="etiqueta-seccion">COMUNIDAD</div>
+    <div class="encabezado-seccion">
+      <div>
+        <h2 class="titulo-seccion">Próximos eventos</h2>
+        <p class="subtitulo-seccion">Talleres, ferias y encuentros pensados para mujeres de todos los niveles y realidades.</p>
+      </div>
+      <a href="#" class="boton boton-secundario boton-chico">Ver todos los eventos</a>
+    </div>
+
+    <div class="eventos__grid">
+      <div class="evento-card">
+        <div class="evento-card__img" style="background-image:url('https://picsum.photos/id/1041/400/300')"></div>
+        <div class="evento-card__body">
+          <div class="evento-card__fecha">22 de octubre · Online</div>
+          <h4>Taller: Cómo fijar precios sin miedo a cobrar de más</h4>
+          <p>Capacitación gratuita para emprendedoras que están partiendo.</p>
+        </div>
+      </div>
+      <div class="evento-card">
+        <div class="evento-card__img" style="background-image:url('https://picsum.photos/id/1050/400/300')"></div>
+        <div class="evento-card__body">
+          <div class="evento-card__fecha">8 de noviembre · Parque O'Higgins</div>
+          <h4>Feria de Mujeres Emprendedoras — Verano 2026</h4>
+          <p>Más de 80 stands de negocios liderados por mujeres de todo Chile.</p>
+        </div>
+      </div>
+      <div class="evento-card">
+        <div class="evento-card__img" style="background-image:url('https://picsum.photos/id/1000/400/300')"></div>
+        <div class="evento-card__body">
+          <div class="evento-card__fecha">Marzo 2027 · Santiago</div>
+          <h4>Corrida de Mujeres — Media Maratón de Santiago 2027</h4>
+          <p>Juntas comunitarias de entrenamiento cada semana antes de la fecha.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Evento destacado con countdown, estilo simple.ripley.cl -->
+    <div class="destacado-evento">
+      <div class="destacado-evento__info">
+        <div class="destacado-evento__kicker">Evento propio · Inscripción abierta</div>
+        <h3>Mañana de Wellness</h3>
+        <p>Sábado 14 de noviembre de 2026. Partimos con un social run alegre y cerramos con un brunch y taller de bienestar emocional. Taller de bienestar — inscríbete ahora para asegurar tu cupo, ¡quedan los últimos disponibles!</p>
+
+        <div class="countdown" id="countdown">
+          <div class="countdown__bloque"><span class="countdown__num" data-dias>00</span><span class="countdown__label">días</span></div>
+          <div class="countdown__bloque"><span class="countdown__num" data-horas>00</span><span class="countdown__label">horas</span></div>
+          <div class="countdown__bloque"><span class="countdown__num" data-min>00</span><span class="countdown__label">min</span></div>
+          <div class="countdown__bloque"><span class="countdown__num" data-seg>00</span><span class="countdown__label">seg</span></div>
+        </div>
+
+        <div class="destacado-evento__cta">
+          <a class="boton boton-primario" href="https://wa.me/56900000000?text=Quiero%20inscribirme%20en%20Ma%C3%B1ana%20de%20Wellness" target="_blank" rel="noopener">Inscríbete por WhatsApp</a>
+          <a class="boton boton-outline-blanco" href="#eventos">Ver detalles</a>
+        </div>
+        <p class="destacado-evento__urgencia">⚡ Quedan pocos cupos disponibles</p>
+      </div>
+      <div class="destacado-evento__imgs">
+        <img src="https://picsum.photos/id/1080/700/700" alt="Mujeres en un taller de bienestar emocional">
+        <img class="img-flotante" src="https://picsum.photos/id/1082/500/500" alt="Mujeres en un social run alegre">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== CÓMO FUNCIONA (versión resumida en Home) ===================
+     La versión completa vive en su propia página (cómo-funciona.html);
+     aquí solo dejamos el resumen de 3 pasos para no perder el flujo del Home. -->
+<section id="como-funciona">
+  <div class="contenedor">
+    <div class="etiqueta-seccion">¿CÓMO FUNCIONA?</div>
+    <h2 class="titulo-seccion">Una forma simple de visibilizar el talento de mujeres</h2>
+
+    <div class="como-funciona__grid" style="margin-top:32px">
+      <div class="paso-card">
+        <div class="paso-card__num">1</div>
+        <h4>Crea tu perfil</h4>
+        <p>Cuenta quién eres, qué haces y qué servicios ofreces. Es gratis y toma menos de 5 minutos.</p>
+      </div>
+      <div class="paso-card">
+        <div class="paso-card__num">2</div>
+        <h4>Déjate descubrir</h4>
+        <p>Apareces en el catálogo y en el buscador cuando alguien busca tu profesión, servicio o región.</p>
+      </div>
+      <div class="paso-card">
+        <div class="paso-card__num">3</div>
+        <h4>Recibe recomendaciones</h4>
+        <p>Tus clientas pueden dejar comentarios y valorar su experiencia contigo, ayudando a que crezcas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== CTA FINAL =================== -->
+<section>
+  <div class="contenedor">
+    <div class="cta-final">
+      <h2>¿Eres una mujer que tiene algo que ofrecer?</h2>
+      <p>Estamos construyendo un espacio para que más mujeres puedan mostrarse, ser descubiertas y tener nuevas oportunidades.</p>
+      <button class="boton boton-primario" data-abrir-modal>Quiero aparecer</button>
+    </div>
+  </div>
+</section>
+
+<!-- =================== FOOTER (punto 1.2.6) =================== -->
+<footer class="footer">
+  <div class="contenedor">
+    <div class="footer__grid">
+      <div class="footer__marca">
+        <div class="logo">Recomienda<span>Mujeres</span></div>
+        <p>Directorio que visibiliza y conecta a mujeres profesionales, emprendedoras y negocios liderados por mujeres en todo Chile.</p>
+        <div class="footer__redes">
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="TikTok">TT</a>
+        </div>
+      </div>
+      <div>
+        <h5>Explorar</h5>
+        <ul>
+          <li><a href="catalogo.html">Catálogo de profesionales</a></li>
+          <li><a href="catalogo.html?tipo=pyme">Catálogo de pymes</a></li>
+          <li><a href="#eventos">Eventos</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Recomienda Mujeres</h5>
+        <ul>
+          <li><a href="#como-funciona">Cómo funciona</a></li>
+          <li><a href="#">Quiénes somos</a></li>
+          <li><a href="#">Suscripciones</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Ayuda</h5>
+        <ul>
+          <li><a href="#">Preguntas frecuentes</a></li>
+          <li><a href="mailto:contacto@recomiendamujeres.cl">Contacto</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__base">
+      <span>© 2026 Recomienda Mujeres</span>
+      <span>Hecho con 💗 en Chile</span>
+    </div>
+  </div>
+</footer>
+
+<!-- =================== MODAL "QUIERO APARECER" =================== -->
+<div class="modal-fondo" id="modal-aparecer">
+  <div class="modal">
+    <button class="modal__cerrar" data-cerrar-modal aria-label="Cerrar">×</button>
+    <h3>Quiero aparecer</h3>
+    <p>Déjanos tus datos para ser parte de las primeras mujeres que aparecen en Recomienda Mujeres.</p>
+    <form onsubmit="alert('Demo: aquí se envía el formulario real.'); return false;">
+      <div class="campo"><label>Nombre</label><input type="text" required></div>
+      <div class="campo"><label>Profesión o servicio</label><input type="text" required></div>
+      <div class="campo"><label>Región</label><input type="text" required></div>
+      <div class="campo"><label>Instagram o página web</label><input type="text"></div>
+      <div class="campo"><label>Cuéntanos brevemente qué haces</label><textarea rows="3"></textarea></div>
+      <button type="submit" class="boton boton-primario">Enviar solicitud</button>
+    </form>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
