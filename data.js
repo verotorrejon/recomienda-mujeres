@@ -49,6 +49,144 @@ const SERVICE_TAGS = [
 ];
 
 /* -------------------------
+   ÁREAS (Área > Profesión) — punto 2.3 y 2.4 del brief
+   Agrupa los mismos PROFESSION_TAGS de arriba en categorías
+   amplias para el mega menú y el buscador inteligente.
+   IMPORTANTE: no se renombra ningún tag existente, solo se
+   agrupan, así ningún perfil actual se ve afectado.
+   Para agregar una profesión nueva en el futuro: súmala a
+   PROFESSION_TAGS y agrégala aquí, dentro del área que le
+   corresponda.
+------------------------- */
+const AREAS = [
+  { id: "salud", nombre: "Salud y Bienestar", icono: "🩺",
+    tags: ["Medicina", "Nutrición", "Psicología", "Odontología", "Kinesiología", "Terapias Alternativas", "Doula y Matronería"] },
+  { id: "belleza", nombre: "Belleza y Estética", icono: "💄",
+    tags: ["Maquillaje", "Peluquería y Estética"] },
+  { id: "negocios", nombre: "Negocios y Asesorías", icono: "💼",
+    tags: ["Coaching", "Abogacía", "Ingeniería Comercial", "Consultoría y Asesoría", "Contabilidad"] },
+  { id: "comunicacion", nombre: "Comunicación y Contenido", icono: "📸",
+    tags: ["Fotografía", "Diseño Gráfico", "Periodismo", "Content Creator", "Community Management"] },
+  { id: "educacion", nombre: "Educación y Desarrollo", icono: "📚",
+    tags: ["Educación y Clases Particulares"] },
+  { id: "hogar", nombre: "Hogar y Diseño", icono: "🏡",
+    tags: ["Arquitectura"] },
+  { id: "deporte", nombre: "Deporte y Movimiento", icono: "🤸‍♀️",
+    tags: ["Personal Training"] }
+];
+
+/* -------------------------
+   SINÓNIMOS — punto 1.2.3 del brief (buscador inteligente)
+   Mapea lenguaje cotidiano/coloquial -> tag real existente.
+   Se puede seguir ampliando sumando líneas, sin tocar nada más.
+------------------------- */
+const SEARCH_SYNONYMS = {
+  "doctor de niños": "Medicina", "doctora": "Medicina", "medico": "Medicina", "médica": "Medicina",
+  "pelo": "Peluquería y Estética", "peinado": "Peluquería y Estética", "uñas": "Peluquería y Estética",
+  "maquillista": "Maquillaje", "maquilladora": "Maquillaje",
+  "abogado": "Abogacía", "leyes": "Abogacía", "legal": "Abogacía", "juicio": "Abogacía",
+  "contador": "Contabilidad", "impuestos": "Contabilidad", "declaracion de renta": "Contabilidad",
+  "terapia": "Psicología", "psicologo": "Psicología", "salud mental": "Psicología",
+  "nutricionista": "Nutrición", "dieta": "Nutrición",
+  "entrenadora": "Personal Training", "gimnasio": "Personal Training", "ejercicio": "Personal Training",
+  "pagina web": "Diseño Gráfico", "diseñadora": "Diseño Gráfico", "logo": "Diseño Gráfico",
+  "redes sociales": "Community Management", "instagram": "Community Management",
+  "fotografa": "Fotografía", "fotos": "Fotografía",
+  "clases": "Educación y Clases Particulares", "profesora": "Educación y Clases Particulares", "tutora": "Educación y Clases Particulares",
+  "embarazo": "Doula y Matronería", "parto": "Doula y Matronería", "matrona": "Doula y Matronería",
+  "diseño de interiores": "Arquitectura", "arquitecta": "Arquitectura",
+  "consultora": "Consultoría y Asesoría", "mentora": "Coaching", "coach": "Coaching",
+  "periodista": "Periodismo",
+  "kinesiologa": "Kinesiología", "fisioterapia": "Kinesiología",
+  "dentista": "Odontología",
+  "acupuntura": "Terapias Alternativas", "reiki": "Terapias Alternativas"
+};
+
+/* -------------------------
+   BANNER / CARRUSEL — punto 2.2.2 del brief
+   5 slides de ejemplo. "link" acepta: una página real del sitio,
+   un ancla (#eventos) o "modal:aparecer" para abrir el formulario.
+------------------------- */
+const BANNER_SLIDES = [
+  {
+    kicker: "Historia destacada",
+    title: "Conoce a Verónica Torrejón, Coach y Consultora en Santiago",
+    text: "De ordenar sus propios objetivos a acompañar a decenas de mujeres cada mes. Su historia, y cómo la encontraron sus primeras clientas.",
+    cta: "Ver su historia",
+    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=1200&q=80",
+    link: "catalogo.html?prof=Coaching"
+  },
+  {
+    kicker: "Evento de la comunidad",
+    title: "Mañana de Wellness — sábado 14 de noviembre",
+    text: "Social run + brunch con taller de bienestar emocional. Quedan los últimos cupos.",
+    cta: "Ver evento",
+    image: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1200&q=80",
+    link: "#eventos"
+  },
+  {
+    kicker: "Únete",
+    title: "¿Tienes un servicio o emprendimiento?",
+    text: "Crea tu perfil gratis y deja que más personas te encuentren.",
+    cta: "Quiero aparecer",
+    image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=1200&q=80",
+    link: "modal:aparecer"
+  },
+  {
+    kicker: "Explora por categoría",
+    title: "Descubre mujeres en salud, belleza, negocios y más",
+    text: "Ordenado por área y profesión, como en las grandes tiendas — para encontrar rápido.",
+    cta: "Ver catálogo",
+    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80",
+    link: "catalogo.html"
+  },
+  {
+    kicker: "Alianza",
+    title: "Nueva alianza con Cámara de Emprendedoras de Chile",
+    text: "Beneficios exclusivos para las profesionales de nuestra comunidad.",
+    cta: "Conocer más",
+    image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1200&q=80",
+    link: "catalogo.html"
+  }
+];
+
+/* -------------------------
+   PRÓXIMOS EVENTOS + EVENTO DESTACADO — punto 1.2.5 del brief
+   "featured.isoDate" alimenta el countdown en vivo.
+------------------------- */
+const EVENTS = {
+  proximos: [
+    {
+      fecha: "22 de octubre · Online",
+      titulo: "Taller: Cómo fijar precios sin miedo a cobrar de más",
+      descripcion: "Capacitación gratuita para emprendedoras que están partiendo.",
+      image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=500&q=80"
+    },
+    {
+      fecha: "8 de noviembre · Parque O'Higgins",
+      titulo: "Feria de Mujeres Emprendedoras — Verano 2026",
+      descripcion: "Más de 80 stands de negocios liderados por mujeres de todo Chile.",
+      image: "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=500&q=80"
+    },
+    {
+      fecha: "Marzo 2027 · Santiago",
+      titulo: "Corrida de Mujeres — Media Maratón de Santiago 2027",
+      descripcion: "Juntas comunitarias de entrenamiento cada semana antes de la fecha.",
+      image: "https://images.unsplash.com/photo-1571008887538-b36bb32f4571?auto=format&fit=crop&w=500&q=80"
+    }
+  ],
+  featured: {
+    kicker: "Evento propio · Inscripción abierta",
+    titulo: "Mañana de Wellness",
+    descripcion: "Sábado 14 de noviembre de 2026. Partimos con un social run alegre y cerramos con un brunch y taller de bienestar emocional. Taller de bienestar — inscríbete ahora para asegurar tu cupo, ¡quedan los últimos disponibles!",
+    isoDate: "2026-11-14T09:00:00-03:00",
+    whatsappUrl: "https://wa.me/56982398540?text=Quiero%20inscribirme%20en%20Ma%C3%B1ana%20de%20Wellness",
+    imagenPrincipal: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=700&q=80",
+    imagenFlotante: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=500&q=80"
+  }
+};
+
+/* -------------------------
    REGIONES DE CHILE
 ------------------------- */
 const REGIONS = [

@@ -187,17 +187,7 @@ function runFilter() {
 
   let filtered = profiles.filter(profile => {
 
-    const allTags = [
-      ...profile.professionTags,
-      ...profile.serviceTags,
-      profile.otherTag || ""
-    ].join(" ").toLowerCase();
-
-    const matchesSearch =
-      !filterState.search ||
-      profile.name.toLowerCase().includes(filterState.search) ||
-      profile.description.toLowerCase().includes(filterState.search) ||
-      allTags.includes(filterState.search);
+    const matchesSearch = matchesSmartSearch(profile, filterState.search);
 
     const matchesRegion =
       !filterState.region || profile.region === filterState.region;
@@ -497,3 +487,266 @@ window.onclick = function (event) {
   if (event.target === joinModal) closeJoinModal();
   if (event.target === profileModal) closeProfileModal();
 };
+
+/* ==========================================================
+   BÚSQUEDA INTELIGENTE — punto 1.2.3 del brief
+   Coincidencia parcial (sin tildes) + sinónimos + tolerancia
+   a errores de tipeo. 100% JS, sin dependencias ni costo.
+   ========================================================== */
+
+function normalizeText(txt) {
+  return (txt || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+}
+
+// Distancia de Levenshtein — mide cuántas letras hay que cambiar
+// para pasar de una palabra a otra. Se usa para tolerar errores
+// de tipeo (ej: "pediatrra" sigue encontrando "Pediatra").
+function levenshtein(a, b) {
+  const m = a.length, n = b.length;
+  const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = a[i - 1] === b[j - 1] ? dp[i - 1][j - 1] : 1 + Math.min(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1]);
+    }
+  }
+  return dp[m][n];
+}
+
+// ¿La consulta calza con algún sinónimo conocido? Devuelve el tag real.
+function findSynonymTag(query) {
+  const q = normalizeText(query);
+  for (const key in SEARCH_SYNONYMS) {
+    const nk = normalizeText(key);
+    if (nk === q || q.includes(nk) || nk.includes(q)) return SEARCH_SYNONYMS[key];
+  }
+  return null;
+}
+
+// Reemplaza la comparación exacta anterior por una búsqueda en 3 pasos:
+// 1) coincidencia parcial (sin tildes/mayúsculas, igual que antes pero más flexible)
+// 2) sinónimo conocido (ej: "pelo" -> "Peluquería y Estética")
+// 3) tolerancia a errores de tipeo contra los tags del propio perfil
+function matchesSmartSearch(profile, rawQuery) {
+  const query = normalizeText(rawQuery);
+  if (!query) return true;
+
+  const allTags = [...profile.professionTags, ...profile.serviceTags, profile.otherTag || ""];
+  const haystack = normalizeText([profile.name, profile.description, ...allTags].join(" "));
+
+  if (haystack.includes(query)) return true;
+
+  const synonymTag = findSynonymTag(query);
+  if (synonymTag && allTags.includes(synonymTag)) return true;
+
+  return allTags.some(tag => tag && levenshtein(normalizeText(tag), query) <= (query.length > 5 ? 2 : 1));
+}
+
+/* ==========================================================
+   MEGA MENÚ (Área > Profesión) — punto 2.3 del brief
+   ========================================================== */
+
+function renderMegaMenus() {
+  document.querySelectorAll(".mega-menu").forEach(cont => {
+    cont.innerHTML = AREAS.map(area => `
+      <div class="mega-menu-grupo">
+        <h4>${area.icono} ${area.nombre}</h4>
+        <ul>
+          ${area.tags.map(tag => `<li><a href="catalogo.html?prof=${encodeURIComponent(tag)}">${tag}</a></li>`).join("")}
+        </ul>
+      </div>
+    `).join("");
+  });
+}
+
+function initMegaMenuToggle() {
+  document.querySelectorAll(".nav-item").forEach(item => {
+    const trigger = item.querySelector(":scope > a");
+    if (!trigger) return;
+    trigger.addEventListener("click", (e) => {
+      e.preventDefault();
+      const abierto = item.classList.contains("abierto");
+      document.querySelectorAll(".nav-item.abierto").forEach(i => i.classList.remove("abierto"));
+      if (!abierto) item.classList.add("abierto");
+    });
+  });
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".nav-item")) {
+      document.querySelectorAll(".nav-item.abierto").forEach(i => i.classList.remove("abierto"));
+    }
+  });
+}
+
+/* ==========================================================
+   BANNER / CARRUSEL — punto 2.2.2 del brief
+   5 slides de BANNER_SLIDES (data.js), autoplay + navegación manual.
+   ========================================================== */
+
+function closeSidebarIfOpen() {
+  const sidebar = document.getElementById("sidebar");
+  if (sidebar && sidebar.classList.contains("open")) closeSidebar();
+}
+
+function renderBanner() {
+  const pista = document.getElementById("carruselPista");
+  if (!pista) return;
+
+  pista.innerHTML = BANNER_SLIDES.map(slide => {
+    const esModal = slide.link.startsWith("modal:");
+    const href = esModal ? "#" : slide.link;
+    const onclick = esModal ? `onclick="closeSidebarIfOpen(); openJoinModal(); return false;"` : "";
+    return `
+      <a class="slide" style="background-image:url('${slide.image}')" href="${href}" ${onclick}>
+        <div class="slide-contenido">
+          <div class="slide-kicker">${slide.kicker}</div>
+          <h3>${slide.title}</h3>
+          <p>${slide.text}</p>
+          <span class="slide-cta">${slide.cta}</span>
+        </div>
+      </a>`;
+  }).join("");
+}
+
+function initCarrusel() {
+  const pista = document.getElementById("carruselPista");
+  const dotsCont = document.getElementById("carruselDots");
+  if (!pista || !dotsCont) return;
+
+  const slides = Array.from(pista.children);
+  if (slides.length === 0) return;
+
+  let actual = 0, timer;
+
+  dotsCont.innerHTML = slides.map((_, i) =>
+    `<button class="carrusel-dot ${i === 0 ? "activo" : ""}" aria-label="Ir a la slide ${i + 1}"></button>`
+  ).join("");
+  const dots = Array.from(dotsCont.children);
+
+  function ir(i) {
+    actual = (i + slides.length) % slides.length;
+    pista.style.transform = `translateX(-${actual * 100}%)`;
+    dots.forEach((d, idx) => d.classList.toggle("activo", idx === actual));
+  }
+  function auto() { timer = setInterval(() => ir(actual + 1), 6000); }
+  function reiniciarAuto() { clearInterval(timer); auto(); }
+
+  dots.forEach((d, i) => d.addEventListener("click", () => { ir(i); reiniciarAuto(); }));
+
+  const prevBtn = document.getElementById("carruselPrev");
+  const nextBtn = document.getElementById("carruselNext");
+  if (prevBtn) prevBtn.addEventListener("click", () => { ir(actual - 1); reiniciarAuto(); });
+  if (nextBtn) nextBtn.addEventListener("click", () => { ir(actual + 1); reiniciarAuto(); });
+
+  ir(0);
+  auto();
+}
+
+/* ==========================================================
+   PRÓXIMOS EVENTOS + COUNTDOWN — punto 1.2.5 del brief
+   ========================================================== */
+
+function renderEventos() {
+  const grid = document.getElementById("eventosGrid");
+  if (grid) {
+    grid.innerHTML = EVENTS.proximos.map(ev => `
+      <div class="evento-card">
+        <div class="evento-card-img" style="background-image:url('${ev.image}')"></div>
+        <div class="evento-card-body">
+          <div class="evento-card-fecha">${ev.fecha}</div>
+          <h4>${ev.titulo}</h4>
+          <p>${ev.descripcion}</p>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  const f = EVENTS.featured;
+  const kicker = document.getElementById("eventoDestacadoKicker");
+  const titulo = document.getElementById("eventoDestacadoTitulo");
+  const desc = document.getElementById("eventoDestacadoDesc");
+  const wa = document.getElementById("eventoDestacadoWhatsapp");
+  const img1 = document.getElementById("eventoDestacadoImg1");
+  const img2 = document.getElementById("eventoDestacadoImg2");
+
+  if (kicker) kicker.textContent = f.kicker;
+  if (titulo) titulo.textContent = f.titulo;
+  if (desc) desc.textContent = f.descripcion;
+  if (wa) wa.href = f.whatsappUrl;
+  if (img1) img1.src = f.imagenPrincipal;
+  if (img2) img2.src = f.imagenFlotante;
+}
+
+function initCountdown() {
+  const el = document.getElementById("countdown");
+  if (!el) return;
+
+  const objetivo = new Date(EVENTS.featured.isoDate).getTime();
+
+  function actualizar() {
+    const diff = Math.max(0, objetivo - Date.now());
+    el.querySelector("[data-dias]").textContent = String(Math.floor(diff / 86400000)).padStart(2, "0");
+    el.querySelector("[data-horas]").textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, "0");
+    el.querySelector("[data-min]").textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, "0");
+    el.querySelector("[data-seg]").textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, "0");
+  }
+  actualizar();
+  setInterval(actualizar, 1000);
+}
+
+/* ==========================================================
+   AUTOCOMPLETADO DEL BUSCADOR DEL HOME — punto 1.2.3 del brief
+   ========================================================== */
+
+function buildSearchIndex() {
+  const index = [];
+  AREAS.forEach(area => area.tags.forEach(tag => index.push({ area, tag })));
+  return index;
+}
+
+function buscarSugerencias(consulta) {
+  const q = normalizeText(consulta);
+  if (q.length < 2) return [];
+
+  const index = buildSearchIndex();
+  const vistos = new Set();
+  const resultados = [];
+  const agregar = (item) => { if (!vistos.has(item.tag)) { vistos.add(item.tag); resultados.push(item); } };
+
+  index.filter(i => normalizeText(i.tag).includes(q)).forEach(agregar);
+
+  if (resultados.length === 0) {
+    const synTag = findSynonymTag(q);
+    const item = synTag && index.find(i => i.tag === synTag);
+    if (item) agregar(item);
+  }
+
+  if (resultados.length === 0) {
+    index.forEach(item => {
+      if (levenshtein(normalizeText(item.tag), q) <= (q.length > 5 ? 2 : 1)) agregar(item);
+    });
+  }
+
+  return resultados.slice(0, 6);
+}
+
+function initHeroSuggestions() {
+  const input = document.getElementById("homeSearchInput");
+  const caja = document.getElementById("searchSuggestions");
+  if (!input || !caja) return;
+
+  input.addEventListener("input", () => {
+    const matches = buscarSugerencias(input.value);
+    caja.innerHTML = matches.length
+      ? `<div class="sug-titulo">Resultados sugeridos</div>` + matches.map(m => `
+          <div class="sug-item" onclick="window.location.href='catalogo.html?prof=${encodeURIComponent(m.tag)}'">
+            <span>${m.area.icono}</span><span>${m.tag}</span><span class="sug-area">${m.area.nombre}</span>
+          </div>`).join("")
+      : "";
+    caja.classList.toggle("visible", matches.length > 0);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!caja.contains(e.target) && e.target !== input) caja.classList.remove("visible");
+  });
+}

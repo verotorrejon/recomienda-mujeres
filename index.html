@@ -47,7 +47,11 @@
       <div class="logo">Recomienda <span>Mujeres</span></div>
     </div>
 
-    <div class="nav-links">
+    <div class="nav-links" id="navLinks">
+      <div class="nav-item">
+        <a href="catalogo.html">Explorar</a>
+        <div class="mega-menu"></div>
+      </div>
       <a href="catalogo.html">Encontrar mujeres</a>
       <a href="#como-funciona">Cómo funciona</a>
       <a href="#" class="nav-button" onclick="openJoinModal(); return false;">Quiero aparecer</a>
@@ -64,6 +68,16 @@
     </div>
   </section>
 
+  <!-- BANNER / CARRUSEL (punto 2.2.2) -->
+  <section class="banner-section">
+    <div class="carrusel">
+      <div class="carrusel-pista" id="carruselPista"></div>
+      <button class="carrusel-flecha izq" id="carruselPrev" aria-label="Slide anterior">‹</button>
+      <button class="carrusel-flecha der" id="carruselNext" aria-label="Slide siguiente">›</button>
+      <div class="carrusel-dots" id="carruselDots"></div>
+    </div>
+  </section>
+
   <!-- SEARCH -->
   <section class="search-section" id="buscar">
     <div class="section-title">
@@ -72,9 +86,53 @@
     </div>
 
     <div class="search-box">
-      <input type="text" id="homeSearchInput" placeholder="Ej: maquilladora, nutricionista, psicóloga, coach...">
+      <input type="text" id="homeSearchInput" placeholder="Ej: maquilladora, nutricionista, psicóloga, coach..." autocomplete="off">
       <select id="homeRegionInput"></select>
       <button onclick="goToCatalog()">Buscar</button>
+      <div class="search-suggestions" id="searchSuggestions"></div>
+    </div>
+  </section>
+
+  <!-- ESPACIO PUBLICITARIO (punto 1.2.4) -->
+  <div class="ads-strip">
+    <div class="ads-marco">
+      <span class="ads-etiqueta">Espacio publicitario</span>
+      <p class="ads-texto">Tu marca aquí — apoya a las mujeres de tu comunidad y <b>llega a cientos de profesionales y sus clientas.</b></p>
+      <a href="#" class="secondary-button" style="padding:10px 20px;">Quiero anunciarme</a>
+    </div>
+  </div>
+
+  <!-- PRÓXIMOS EVENTOS + COUNTDOWN (punto 1.2.5) -->
+  <section class="eventos-section" id="eventos">
+    <div class="section-title">
+      <h2>Próximos eventos</h2>
+      <p>Talleres, ferias y encuentros pensados para mujeres de todos los niveles y realidades.</p>
+    </div>
+
+    <div class="eventos-grid" id="eventosGrid"></div>
+
+    <div class="evento-destacado">
+      <div class="evento-destacado-info">
+        <div class="evento-destacado-kicker" id="eventoDestacadoKicker"></div>
+        <h3 id="eventoDestacadoTitulo"></h3>
+        <p id="eventoDestacadoDesc"></p>
+
+        <div class="countdown" id="countdown">
+          <div class="countdown-bloque"><span class="countdown-num" data-dias>00</span><span class="countdown-label">días</span></div>
+          <div class="countdown-bloque"><span class="countdown-num" data-horas>00</span><span class="countdown-label">horas</span></div>
+          <div class="countdown-bloque"><span class="countdown-num" data-min>00</span><span class="countdown-label">min</span></div>
+          <div class="countdown-bloque"><span class="countdown-num" data-seg>00</span><span class="countdown-label">seg</span></div>
+        </div>
+
+        <div class="evento-destacado-cta">
+          <a class="primary-button" id="eventoDestacadoWhatsapp" target="_blank" rel="noopener" style="display:inline-block;">Inscríbete por WhatsApp</a>
+        </div>
+        <p class="evento-destacado-urgencia">⚡ Quedan pocos cupos disponibles</p>
+      </div>
+      <div class="evento-destacado-imgs">
+        <img id="eventoDestacadoImg1" alt="Mujeres en un taller de bienestar emocional">
+        <img class="img-flotante" id="eventoDestacadoImg2" alt="Mujeres en un social run alegre">
+      </div>
     </div>
   </section>
 
@@ -197,6 +255,15 @@
 
     fillRegionSelects();
     buildSidebarFilters();
+
+    // Nuevo: mega menú, banner/carrusel, eventos+countdown y autocompletado
+    renderMegaMenus();
+    initMegaMenuToggle();
+    renderBanner();
+    initCarrusel();
+    renderEventos();
+    initCountdown();
+    initHeroSuggestions();
 
     // Si llegan a index.html con un link de perfil compartido, mándalos al catálogo
     const initParams = new URLSearchParams(window.location.search);
