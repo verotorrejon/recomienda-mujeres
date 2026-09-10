@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo — Recomienda Mujeres</title>
+  <meta name="description" content="Explora el catálogo completo de mujeres profesionales, filtra por profesión, servicio, región y rating.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+  <div class="sidebar" id="sidebar">
+    <span class="sidebar-close" onclick="closeSidebar()">&times;</span>
+
+    <div class="sidebar-nav">
+      <a href="index.html">Inicio</a>
+      <a href="catalogo.html">Catálogo completo</a>
+      <a href="index.html#como-funciona">Cómo funciona</a>
+      <a href="#" onclick="closeSidebar(); openJoinModal(); return false;">Quiero aparecer</a>
+    </div>
+
+    <h3>Filtrar por región</h3>
+    <select id="sidebarRegion"></select>
+
+    <h3>Filtrar por rating mínimo</h3>
+    <select id="sidebarRating">
+      <option value="0">Todos</option>
+      <option value="4">4.0+</option>
+      <option value="4.5">4.5+</option>
+      <option value="4.8">4.8+</option>
+      <option value="5">Solo 5.0</option>
+    </select>
+
+    <h3>Filtrar por profesión</h3>
+    <div class="tag-list" id="sidebarProfessionTags"></div>
+
+    <button class="sidebar-apply" onclick="applySidebarFilters()">Ver resultados</button>
+    <button class="sidebar-clear" onclick="clearSidebarFilters()">Limpiar filtros</button>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-left">
+      <button class="hamburger-btn" onclick="openSidebar()" aria-label="Abrir menú">☰</button>
+      <div class="logo">Recomienda <span>Mujeres</span></div>
+    </div>
+
+    <div class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="index.html#como-funciona">Cómo funciona</a>
+      <a href="#" class="nav-button" onclick="openJoinModal(); return false;">Quiero aparecer</a>
+    </div>
+  </nav>
+
+  <!-- HEADER DE BÚSQUEDA -->
+  <section class="search-section">
+    <div class="section-title">
+      <h2>Catálogo completo</h2>
+      <p>Filtra por profesión, servicio, región o rating para encontrar a la persona ideal.</p>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Ej: maquilladora, nutricionista, psicóloga..." oninput="runFilter()">
+      <select id="regionFilter" onchange="filterState.region = this.value; runFilter();"></select>
+      <button onclick="openSidebar()">Más filtros</button>
+    </div>
+
+    <div class="extra-filters">
+      <label>
+        Rating mínimo:
+        <select id="ratingFilter" onchange="runFilter()">
+          <option value="0">Todos</option>
+          <option value="4">4.0+</option>
+          <option value="4.5">4.5+</option>
+          <option value="4.8">4.8+</option>
+          <option value="5">Solo 5.0</option>
+        </select>
+      </label>
+
+      <label>
+        Ordenar por:
+        <select id="sortBy" onchange="runFilter()">
+          <option value="default">Recomendado</option>
+          <option value="name-asc">Nombre (A-Z)</option>
+          <option value="reviews-desc">Más evaluaciones</option>
+          <option value="rating-desc">Mejor rating</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="active-tags" id="activeTagsBar"></div>
+  </section>
+
+  <!-- DIRECTORY -->
+  <section class="directory">
+    <div class="results-info" id="resultsInfo">Mostrando mujeres recomendadas</div>
+    <div class="profiles-grid" id="profilesGrid"></div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>© 2026 Recomienda Mujeres</footer>
+
+  <!-- JOIN MODAL -->
+  <div class="modal" id="joinModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeJoinModal()">&times;</span>
+      <h2>Quiero aparecer</h2>
+      <p style="color:#777; margin-bottom:25px;">Déjanos tus datos para ser parte de las primeras mujeres que aparecen en Recomienda Mujeres.</p>
+
+      <iframe id="formEmbed" style="display:none; width:100%; min-height:600px; border:none;"></iframe>
+
+      <form id="fallbackForm" onsubmit="submitJoinForm(event)">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" required placeholder="Tu nombre">
+        </div>
+
+        <div class="form-group">
+          <label>Tags de profesión <span class="tag-hint">(elige hasta 3)</span></label>
+          <div class="tag-list" id="joinProfessionTags"></div>
+          <input class="other-input" id="joinProfessionOther" type="text" placeholder="Escribe tu profesión">
+        </div>
+
+        <div class="form-group">
+          <label>Tags de servicio <span class="tag-hint">(elige hasta 4)</span></label>
+          <div class="tag-list" id="joinServiceTags"></div>
+          <input class="other-input" id="joinServiceOther" type="text" placeholder="Describe tu servicio">
+        </div>
+
+        <div class="form-group">
+          <label>Región</label>
+          <select required id="joinRegionSelect"></select>
+        </div>
+
+        <div class="form-group">
+          <label>Instagram o página web</label>
+          <input type="text" placeholder="Ej: @verotorrejon">
+        </div>
+
+        <div class="form-group">
+          <label>Cuéntanos brevemente qué haces</label>
+          <textarea placeholder="Describe tu trabajo..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-button">Enviar solicitud</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- PROFILE MODAL -->
+  <div class="modal" id="profileModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeProfileModal()">&times;</span>
+      <div id="profileDetails"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+
+    function fillJoinRegionSelect() {
+      const joinRegion = document.getElementById("joinRegionSelect");
+      joinRegion.innerHTML = `<option value="">Selecciona una región</option>` +
+        REGIONS.map(r => `<option>${r}</option>`).join("") + `<option>Otra</option>`;
+    }
+
+    // 1. Leer filtros desde la URL (por si vienen del home o de un link compartido)
+    readFiltersFromURL();
+
+    // 2. Rellenar selects
+    const regionOpts = `<option value="">Todas las regiones</option>` +
+      REGIONS.map(r => `<option value="${r}">${r}</option>`).join("");
+    document.getElementById("regionFilter").innerHTML = regionOpts;
+    document.getElementById("regionFilter").value = filterState.region;
+    document.getElementById("searchInput").value = filterState.search;
+    document.getElementById("ratingFilter").value = filterState.minRating || "0";
+    document.getElementById("sortBy").value = filterState.sort;
+
+    fillJoinRegionSelect();
+    buildSidebarFilters();
+    renderActiveTagPills();
+
+    // 3. Mostrar perfiles de ejemplo primero (para que no se vea vacío)
+    runFilter();
+
+    // 4. Si hay un link de perfil compartido, abrirlo directo
+    const initParams = new URLSearchParams(window.location.search);
+    if (initParams.get("perfil")) {
+      openProfile(parseInt(initParams.get("perfil"), 10));
+    }
+
+    // 5. Intentar cargar perfiles reales desde Google Sheets (si ya está conectado)
+    loadProfilesFromSheet();
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recomienda Mujeres</title>
+  <meta name="description" content="Encuentra, recomienda y descubre mujeres profesionales, emprendedoras y trabajadoras independientes en todo Chile.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+  <div class="sidebar" id="sidebar">
+    <span class="sidebar-close" onclick="closeSidebar()">&times;</span>
+
+    <div class="sidebar-nav">
+      <a href="index.html">Inicio</a>
+      <a href="catalogo.html">Ver catálogo completo</a>
+      <a href="index.html#como-funciona">Cómo funciona</a>
+      <a href="#" onclick="closeSidebar(); openJoinModal(); return false;">Quiero aparecer</a>
+    </div>
+
+    <h3>Filtrar por región</h3>
+    <select id="sidebarRegion"></select>
+
+    <h3>Filtrar por rating mínimo</h3>
+    <select id="sidebarRating">
+      <option value="0">Todos</option>
+      <option value="4">4.0+</option>
+      <option value="4.5">4.5+</option>
+      <option value="4.8">4.8+</option>
+      <option value="5">Solo 5.0</option>
+    </select>
+
+    <h3>Filtrar por profesión</h3>
+    <div class="tag-list" id="sidebarProfessionTags"></div>
+
+    <button class="sidebar-apply" onclick="applySidebarFilters()">Ver resultados</button>
+    <button class="sidebar-clear" onclick="clearSidebarFilters()">Limpiar filtros</button>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-left">
+      <button class="hamburger-btn" onclick="openSidebar()" aria-label="Abrir menú">☰</button>
+      <div class="logo">Recomienda <span>Mujeres</span></div>
+    </div>
+
+    <div class="nav-links">
+      <a href="catalogo.html">Encontrar mujeres</a>
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#" class="nav-button" onclick="openJoinModal(); return false;">Quiero aparecer</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Recomienda <span>mujeres</span> que hacen cosas increíbles.</h1>
+    <p>Un espacio para descubrir, recomendar y visibilizar a mujeres profesionales, emprendedoras y trabajadoras independientes.</p>
+    <div class="hero-buttons">
+      <a href="catalogo.html"><button class="primary-button">Encontrar una mujer</button></a>
+      <button class="secondary-button" onclick="openJoinModal()">Quiero aparecer</button>
+    </div>
+  </section>
+
+  <!-- SEARCH -->
+  <section class="search-section" id="buscar">
+    <div class="section-title">
+      <h2>Encuentra a alguien recomendada</h2>
+      <p>Busca por profesión, servicio o región. Te llevamos directo al catálogo con tu búsqueda.</p>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="homeSearchInput" placeholder="Ej: maquilladora, nutricionista, psicóloga, coach...">
+      <select id="homeRegionInput"></select>
+      <button onclick="goToCatalog()">Buscar</button>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="como-funciona">
+    <div class="section-title">
+      <h2>¿Cómo funciona?</h2>
+      <p>Una forma simple de visibilizar el talento de mujeres.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Crea tu perfil</h3>
+        <p>Cuenta quién eres, qué haces, qué servicios ofreces y muestra tu trabajo.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Déjate descubrir</h3>
+        <p>Otras personas pueden encontrarte buscando por profesión, servicio o región.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Recibe recomendaciones</h3>
+        <p>Tus clientas pueden dejar comentarios y valorar su experiencia contigo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <h2>¿Eres una mujer que tiene algo que ofrecer?</h2>
+    <p>Estamos construyendo un espacio para que más mujeres puedan mostrarse, ser descubiertas y tener nuevas oportunidades.</p>
+    <button class="secondary-button" onclick="openJoinModal()">Quiero aparecer</button>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>© 2026 Recomienda Mujeres</footer>
+
+  <!-- JOIN MODAL -->
+  <div class="modal" id="joinModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeJoinModal()">&times;</span>
+      <h2>Quiero aparecer</h2>
+      <p style="color:#777; margin-bottom:25px;">Déjanos tus datos para ser parte de las primeras mujeres que aparecen en Recomienda Mujeres.</p>
+
+      <iframe id="formEmbed" style="display:none; width:100%; min-height:600px; border:none;"></iframe>
+
+      <form id="fallbackForm" onsubmit="submitJoinForm(event)">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" required placeholder="Tu nombre">
+        </div>
+
+        <div class="form-group">
+          <label>Tags de profesión <span class="tag-hint">(elige hasta 3)</span></label>
+          <div class="tag-list" id="joinProfessionTags"></div>
+          <input class="other-input" id="joinProfessionOther" type="text" placeholder="Escribe tu profesión">
+        </div>
+
+        <div class="form-group">
+          <label>Tags de servicio <span class="tag-hint">(elige hasta 4)</span></label>
+          <div class="tag-list" id="joinServiceTags"></div>
+          <input class="other-input" id="joinServiceOther" type="text" placeholder="Describe tu servicio">
+        </div>
+
+        <div class="form-group">
+          <label>Región</label>
+          <select required id="joinRegionSelect"></select>
+        </div>
+
+        <div class="form-group">
+          <label>Instagram o página web</label>
+          <input type="text" placeholder="Ej: @verotorrejon">
+        </div>
+
+        <div class="form-group">
+          <label>Cuéntanos brevemente qué haces</label>
+          <textarea placeholder="Describe tu trabajo..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-button">Enviar solicitud</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- PROFILE MODAL (por si se abre un link compartido de perfil) -->
+  <div class="modal" id="profileModal">
+    <div class="modal-content">
+      <span class="close" onclick="closeProfileModal()">&times;</span>
+      <div id="profileDetails"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+
+    function fillRegionSelects() {
+      const opts = `<option value="">Todas las regiones</option>` +
+        REGIONS.map(r => `<option value="${r}">${r}</option>`).join("");
+
+      document.getElementById("homeRegionInput").innerHTML = opts;
+
+      const joinRegion = document.getElementById("joinRegionSelect");
+      joinRegion.innerHTML = `<option value="">Selecciona una región</option>` +
+        REGIONS.map(r => `<option>${r}</option>`).join("") + `<option>Otra</option>`;
+    }
+
+    function goToCatalog() {
+      const q = document.getElementById("homeSearchInput").value.trim();
+      const region = document.getElementById("homeRegionInput").value;
+
+      const params = new URLSearchParams();
+      if (q) params.set("q", q);
+      if (region) params.set("region", region);
+
+      window.location.href = "catalogo.html" + (params.toString() ? "?" + params.toString() : "");
+    }
+
+    fillRegionSelects();
+    buildSidebarFilters();
+
+    // Si llegan a index.html con un link de perfil compartido, mándalos al catálogo
+    const initParams = new URLSearchParams(window.location.search);
+    if (initParams.get("perfil")) {
+      window.location.href = "catalogo.html" + window.location.search;
+    }
+
+  </script>
+
+</body>
+</html>
