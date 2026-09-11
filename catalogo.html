@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profesionales · Recomienda Mujeres</title>
+  <meta name="description" content="Busca profesionales y prestadoras de servicios liderados por mujeres en Chile.">
+  <meta name="theme-color" content="#30272c"><meta property="og:title" content="Catálogo de profesionales · Recomienda Mujeres"><meta property="og:type" content="website">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="catalog" data-catalog-type="professional">
+  <div id="siteHeader"></div>
+  <main id="mainContent">
+    <section class="page-hero narrow-hero"><div class="site-width page-hero-grid"><div><p class="eyebrow">Directorio de profesionales</p><h1>Encuentra el talento que necesitas.</h1></div><div class="page-hero-side"><p>Busca por palabras cotidianas, profesión, región o modalidad. Todos los perfiles actuales están identificados como demostrativos.</p></div></div></section>
+    <section class="section-compact surface-section"><div class="site-width catalog-shell">
+      <aside class="catalog-filters" aria-label="Filtros del catálogo">
+        <h2>Filtrar resultados</h2>
+        <div class="filter-group"><label for="catalogSearch">Palabra o servicio</label><input id="catalogSearch" type="search" placeholder="Ej.: sicóloga, pelo..."></div>
+        <div class="filter-group"><label for="areaFilter">Área</label><select id="areaFilter"></select></div>
+        <div class="filter-group"><label for="professionFilter">Profesión</label><select id="professionFilter"></select></div>
+        <div class="filter-group"><label for="regionFilter">Región</label><select id="regionFilter"></select></div>
+        <div class="filter-group"><label for="modeFilter">Modalidad</label><select id="modeFilter"><option value="">Todas</option><option value="online">Online</option><option value="presencial">Presencial</option></select></div>
+        <div class="filter-group"><label for="sortFilter">Ordenar</label><select id="sortFilter"><option value="recommended">Recomendados</option><option value="rating">Mejor valoración</option><option value="reviews">Más referencias</option><option value="name">Nombre A–Z</option></select></div>
+        <button class="button button-secondary button-full" id="clearFilters" type="button">Limpiar filtros</button>
+      </aside>
+      <div class="catalog-results"><div class="catalog-toolbar"><strong id="catalogCount">Resultados</strong><span class="muted">Guardados solo en este dispositivo</span></div><div class="active-filters" id="activeFilters"></div><div class="profile-grid" id="catalogGrid"></div></div>
+    </div></section>
+  </main>
+  <div id="siteFooter"></div><script src="data.js"></script><script src="app.js"></script>
+</body>
+</html>
