@@ -78,11 +78,11 @@ const PROFILES = [
   {
     id: "veronica-torrejon", type: "professional", name: "Verónica Torrejón", initials: "VT", plan: "pro", demo: true,
     headline: "Coach y consultora para emprendedoras", areas: ["negocios", "educacion"], professions: ["coaching", "consultoria"],
-    services: ["Atención online", "Acompañamiento mensual", "Talleres grupales", "Servicios para empresas"],
-    region: "Metropolitana", city: "Santiago", modes: ["online", "presencial"], rating: 5, reviews: 12,
+    services: ["Atención online", "Atención presencial", "Acompañamiento mensual", "Talleres grupales", "Servicios para empresas"],
+    region: "Metropolitana", city: "Santiago", modes: ["online", "presencial"], rating: 5, reviews: 72,
     description: "Acompaña a mujeres que quieren ordenar sus objetivos, fortalecer sus negocios y convertir ideas en planes concretos.",
     about: "Su trabajo combina conversaciones estratégicas, herramientas prácticas y seguimiento. Atiende procesos individuales y facilita talleres para equipos y comunidades.",
-    whatsapp: SITE.whatsapp, instagram: SITE.instagram, website: "", avatarColor: "#8f3d62",
+    whatsapp: SITE.whatsapp, instagram: SITE.instagram, website: "https://verotorrejon.github.io/Mi-propio-Linktree/", avatarColor: "#8f3d62",
     availability: "Agenda abierta para octubre", gallery: ["assets/images/comunidad-hero.webp", "assets/images/taller-wellness.webp"],
     reviewList: [
       { name: "Paula", text: "Me ayudó a ordenar el foco comercial y convertir las ideas en tareas concretas." },
